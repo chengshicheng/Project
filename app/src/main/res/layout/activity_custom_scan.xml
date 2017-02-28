@@ -9,18 +9,10 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <TextView
-            android:id="@+id/Title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:text="条码扫描"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            />
+        app:theme="@style/mToolbarTheme">
 
     </android.support.v7.widget.Toolbar>
 
@@ -49,8 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/btn_switch"
+        android:layout_centerHorizontal="true"
         android:text="请打开闪光灯"
         android:textColor="@color/whiteText"
         android:textSize="14sp" />

@@ -3,6 +3,7 @@ package com.chengshicheng.project;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -58,6 +59,12 @@ public class CustomScanActivity extends BaseActivity implements DecoratedBarcode
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scan);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//显示title
+        toolbar.setTitle("扫描");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         flash_switch = (ImageView) findViewById(R.id.btn_switch);
         mDBV = (DecoratedBarcodeView) findViewById(R.id.dbv_custom);
         flash_switch.setOnClickListener(new View.OnClickListener() {

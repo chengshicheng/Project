@@ -112,7 +112,10 @@ public class ChooseCompanyActivity extends BaseActivity implements AdapterView.O
 
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//显示title
         toolbar.setTitle("选择快递");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.too);
 //
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
