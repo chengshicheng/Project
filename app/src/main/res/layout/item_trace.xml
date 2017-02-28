@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/rlTimeline"
+        android:layout_width="60dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvTopLine"
+            android:layout_width="0.5dp"
+            android:layout_height="15dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/timeLine"
+            android:textColor="@color/blackText" />
+
+        <TextView
+            android:id="@+id/tvDot"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_below="@id/tvTopLine"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/timelline_dot_normal"
+            android:textColor="@color/blackText" />
+
+        <TextView
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tvDot"
+            android:layout_centerHorizontal="true"
+            android:background="@color/timeLine"
+            android:textColor="@color/blackText" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="6dp"
+        android:paddingRight="9dp"
+        android:paddingTop="12dp">
+
+        <TextView
+            android:id="@+id/tvAcceptStation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:text="快件在 深圳 ,准备送往下一站 深圳集散中心 [深圳市]"
+            android:textColor="@color/blackText"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvAcceptTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvAcceptStation"
+            android:layout_marginTop="3dp"
+            android:text="2014/06/24 20:55:28"
+            android:textColor="@color/blackText"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+</LinearLayout>

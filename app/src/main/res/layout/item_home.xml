@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:clickable="true"
+    android:longClickable="true"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="10dp">
+
+
+        <TextView
+            android:id="@+id/tvDot"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/timelline_dot_normal"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/whiteText"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/middleLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rightLayout"
+            android:layout_toRightOf="@+id/tvDot"
+            android:orientation="vertical"
+            android:paddingLeft="10dp">
+
+            <TextView
+                android:id="@+id/tvRemark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/blackText" />
+
+            <TextView
+                android:id="@+id/tvNameNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRemark"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textColor="@color/blackText" />
+
+            <TextView
+                android:id="@+id/tvDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvNameNum"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textColor="@color/greyText"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rightLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/tvState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@color/greyText"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvState"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="s"
+                android:textColor="@color/greyText"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
