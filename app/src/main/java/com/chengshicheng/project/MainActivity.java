@@ -2,6 +2,8 @@ package com.chengshicheng.project;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,7 +33,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private List<String> mTitleList = new ArrayList<>();//页卡标题集合
 
@@ -39,7 +42,6 @@ public class MainActivity extends AppCompatActivity
     private TabLayout mTabLayout;
     private String NAVIG_ITEM = "choosenNavigationItem";
     private Toolbar mToolbar;
-    private MenuItem searchItem;
     private TabFragmentPagerAdapter fragmentAdapter;
 
 
@@ -50,8 +52,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-//        refreshToolBar(null);
-
         refreshTabLayout();
     }
 
@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity
     private void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        //实现侧滑菜单状态栏透明
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -152,33 +158,6 @@ public class MainActivity extends AppCompatActivity
         mTabLayout.setupWithViewPager(mViewPager, true);
     }
 
-//
-//    private void refreshToolBar(Menu menu) {
-//        int item = getNavigationItem();
-//        mToolbar.getMenu().clear();
-//        invalidateOptionsMenu();
-//        switch (item) {
-//            case 0:
-//                getSupportActionBar().setTitle("快递鸟");
-//                mToolbar.inflateMenu(R.menu.kd_fragment);//加载
-//                break;
-//            case 1:
-//                getSupportActionBar().setTitle("Gally");
-//                mToolbar.inflateMenu(R.menu.main);//加载
-//                break;
-//            case 2:
-//                getSupportActionBar().setTitle("Slideshow");
-//                mToolbar.inflateMenu(R.menu.main);//加载
-//                break;
-//            case 3:
-//                getSupportActionBar().setTitle("Tool");
-//                mToolbar.inflateMenu(R.menu.main);//加载
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
 
     @Override
     public void onBackPressed() {
@@ -190,21 +169,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

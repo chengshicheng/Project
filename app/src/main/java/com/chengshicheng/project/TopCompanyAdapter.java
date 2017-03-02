@@ -40,8 +40,8 @@ public class TopCompanyAdapter extends BaseAdapter {
             holder.expNumberText = (TextView) view.findViewById(R.id.expNO);
             holder.rightImage = (ImageView) view.findViewById(R.id.rightImage);
 
-            holder.comanyImage.setImageResource(R.drawable.aap);
-            holder.rightImage.setImageResource(R.drawable.a7o);
+//            holder.comanyImage.setImageResource(R.drawable.aap);
+//            holder.rightImage.setImageResource(R.drawable.a7o);
             holder.comanyText.setTextColor(ProjectApp.getContext().getResources().getColor(R.color.colorAccent));
             holder.expNumberText.setTextColor(ProjectApp.getContext().getResources().getColor(R.color.colorAccent));
 

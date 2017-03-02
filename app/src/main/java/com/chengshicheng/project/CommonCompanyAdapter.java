@@ -35,9 +35,6 @@ public class CommonCompanyAdapter extends BaseAdapter {
             holder.expNumberText = (TextView) view.findViewById(R.id.expNO);
             holder.rightImage = (ImageView) view.findViewById(R.id.rightImage);
 
-            holder.comanyImage.setImageResource(R.drawable.aap);
-            holder.rightImage.setImageResource(R.drawable.a7o);
-
             view.setTag(holder);//绑定ViewHolder对象
         } else {
             view = convertView;

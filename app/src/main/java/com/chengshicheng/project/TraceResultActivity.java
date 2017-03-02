@@ -80,11 +80,12 @@ public class TraceResultActivity extends BaseActivity implements SwipeRefreshLay
 
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("物流详情");
-        collapsingToolbar.setCollapsedTitleGravity(Gravity.CENTER);
+//        collapsingToolbar.setCollapsedTitleGravity(Gravity.LEFT);
         View floatBtn = findViewById(R.id.floatingButton);
         floatBtn.setOnClickListener(this);
 

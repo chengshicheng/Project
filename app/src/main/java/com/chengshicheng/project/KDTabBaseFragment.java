@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,7 +37,6 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     private static OrderQuery chosenOrder;
     public Activity mActivity;
 
-    private MenuItem searchItem;
 
     private int requestCode = 100;
 
@@ -52,7 +52,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.kd_fragment, menu);
-        searchItem = menu.findItem(R.id.menu_search);//在菜单中找到对应控件的item
+        MenuItem  searchItem = menu.findItem(R.id.menu_search);//在菜单中找到对应控件的item
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
