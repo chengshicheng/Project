@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,6 +28,8 @@ import com.chengshicheng.greendao.gen.OrderQueryDao;
 import com.chengshicheng.project.greendao.GreenDaoHelper;
 import com.chengshicheng.project.greendao.OrderQuery;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by chengshicheng on 2017/2/25.
  */
@@ -36,6 +39,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     private LocalBroadcastManager broadcastManager;
     private static OrderQuery chosenOrder;
     public Activity mActivity;
+    private MenuItem searchItem;
 
 
     private int requestCode = 100;
@@ -52,7 +56,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.kd_fragment, menu);
-        MenuItem  searchItem = menu.findItem(R.id.menu_search);//在菜单中找到对应控件的item
+        searchItem = menu.findItem(R.id.menu_search);//在菜单中找到对应控件的item
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -100,11 +104,8 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         GreenDaoHelper.initDatabase();
         mOrderDao = GreenDaoHelper.getDaoSession().getOrderQueryDao();
-        receiveRefreshBroadcast();
         initData();
         View view = initView();
         return view;
@@ -217,4 +218,11 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         localBroadcastManager.sendBroadcast(intent);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            MenuItemCompat.collapseActionView(searchItem);//收起搜索框
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

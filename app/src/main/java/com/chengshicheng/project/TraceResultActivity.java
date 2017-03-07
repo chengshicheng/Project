@@ -182,11 +182,6 @@ public class TraceResultActivity extends BaseActivity implements SwipeRefreshLay
         //更新数据
         mOrderDao.insertOrReplace(save);
         sendBroadCastToRefresh();
-        //
-        //        OrderQuery query = mOrderDao.queryBuilder().where(OrderQueryDao.Properties.OrderCode.eq("YD")).unique();
-        //        if (query != null) {
-        //            LogUtil.PrintDebug(query.getOrderNum() + "");
-        //        }
     }
 
 
@@ -207,13 +202,13 @@ public class TraceResultActivity extends BaseActivity implements SwipeRefreshLay
                     public void OnPositive(String text) {
                         oldOrder.setRemark(text);
                         mOrderDao.insertOrReplace(oldOrder);
-                        sendBroadCastToRefresh();
                         if (!TextUtils.isEmpty(oldOrder.getRemark())) {
                             tvRemark.setText("备注：" + oldOrder.getRemark());
                             tvRemark.setVisibility(View.VISIBLE);
                         } else {
                             tvRemark.setVisibility(View.GONE);
                         }
+                        sendBroadCastToRefresh();
                     }
                 });
                 dialog.show();
