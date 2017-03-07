@@ -79,6 +79,7 @@ public class KDRecyclerAdapter extends RecyclerView.Adapter<KDRecyclerAdapter.My
         if (TextUtils.isEmpty(order.getRemark())) {
             holder.tvRemark.setVisibility(View.GONE);
             holder.tvNameNum.setTextSize(16);
+            holder.tvNameNum.setTextColor(mContext.getResources().getColor(R.color.blackText));
         } else {
             holder.tvRemark.setVisibility(View.VISIBLE);
             holder.tvRemark.setTextSize(16);

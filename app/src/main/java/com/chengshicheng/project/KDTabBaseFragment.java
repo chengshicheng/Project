@@ -71,7 +71,6 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
                     intent.putExtra("requestNumber", query);
                     startActivityForResult(intent, requestCode);
                 }
-                DialogUtils.ShowToast(query);
                 return false;
 
             }
@@ -104,6 +103,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        receiveRefreshBroadcast();
         GreenDaoHelper.initDatabase();
         mOrderDao = GreenDaoHelper.getDaoSession().getOrderQueryDao();
         initData();
@@ -121,6 +121,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         @Override
         public void onReceive(Context context, Intent intent) {
             refreshRecyclerView();
+            LogUtils.Print("onReceive",LogUtils.ERROR);
         }
 
     }
