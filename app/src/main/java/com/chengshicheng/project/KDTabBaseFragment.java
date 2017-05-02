@@ -158,6 +158,8 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
                     public void OnPositive(String text) {
                         chosenOrder.setRemark(text);
                         mOrderDao.insertOrReplace(query);
+                        mActivity = (MainActivity) mContext;
+                        mActivity.notifyObservers();
                     }
                 });
                 dialog.show();
