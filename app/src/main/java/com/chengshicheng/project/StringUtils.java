@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 
 /**
+ * 字符串工具类
  * Created by chengshicheng on 2017/2/26.
  */
 
@@ -18,7 +19,7 @@ public class StringUtils {
     public static String AppKey = "200c950d-3605-42d9-9007-4ec08f7f4d1c";
 
     /***
-     * 通知主界面刷新的广播action
+     * 通知主界面刷新假面的广播action
      */
     public static final String refreshAction = "com.chengshicheng.courierquery.refreshMainActivity";
 

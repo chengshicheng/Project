@@ -2,53 +2,47 @@ package com.chengshicheng.project;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.chengshicheng.greendao.gen.OrderQueryDao;
-import com.chengshicheng.project.greendao.GreenDaoHelper;
 import com.chengshicheng.project.greendao.OrderQuery;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
+ * 快递鸟——Fragment 基类，主要实现对点击事件的统一处理
  * Created by chengshicheng on 2017/2/25.
  */
 
-public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerViewItemClickListener, OnRecyclerViewItemLongClickListener {
-    public OrderQueryDao mOrderDao;
+public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerViewItemClickListener, OnRecyclerViewItemLongClickListener, Observer {
+    public static OrderQueryDao mOrderDao;
     private LocalBroadcastManager broadcastManager;
     private static OrderQuery chosenOrder;
-    public Activity mActivity;
+    public static Context mContext;
     private MenuItem searchItem;
 
 
     private int requestCode = 100;
+    private MainActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = getActivity();
-        mActivity.setTitle("快递鸟");
+        Activity mContext = getActivity();
+        mContext.setTitle("快递鸟");
         setHasOptionsMenu(true);//onCreateOptionsMenu生效
     }
 
@@ -63,7 +57,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(mActivity, ChooseCompanyActivity.class);
+                Intent intent = new Intent(mContext, ChooseCompanyActivity.class);
                 if (query.length() < 6 || query.length() > 50) {
                     DialogUtils.ShowToast("单号格式错误");
                 } else {
@@ -88,7 +82,7 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         switch (item.getItemId()) {
             case R.id.menu_scan:
                 Intent intent = new Intent();
-                intent.setClass(mActivity, ChooseCompanyActivity.class);
+                intent.setClass(mContext, ChooseCompanyActivity.class);
                 intent.putExtra("requestType", 2);
                 startActivityForResult(intent, requestCode);
                 break;
@@ -100,37 +94,12 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        receiveRefreshBroadcast();
-        GreenDaoHelper.initDatabase();
-        mOrderDao = GreenDaoHelper.getDaoSession().getOrderQueryDao();
-        initData();
-        View view = initView();
-        return view;
-    }
-
-    protected abstract View initView();
-
-    protected abstract void initData();
-
-    public abstract void refreshRecyclerView();
-
-    private class MyLocalBroadCastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshRecyclerView();
-            LogUtils.Print("onReceive",LogUtils.ERROR);
-        }
-
-    }
 
     @Override
     public void onItemClick(View view, int position) {
         chosenOrder = getChosenItem(position);
         Intent intent = new Intent();
-        intent.setClass(mActivity, TraceResultActivity.class);
+        intent.setClass(mContext, TraceResultActivity.class);
         intent.putExtra("expCode", chosenOrder.getOrderCode());
         intent.putExtra("expName", chosenOrder.getOrderName());
         intent.putExtra("expNO", chosenOrder.getOrderNum().toString());
@@ -151,10 +120,11 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
             items[0] = "取消置顶";
         }
 
-        Dialog dialog = DialogUtils.createListDialog(mActivity, title, items,
+        Dialog dialog = DialogUtils.createListDialog(mContext, title, items,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        LogUtils.PrintDebug("handleLongClick:" + which);
                         handleLongClick(which);
                     }
                 });
@@ -167,56 +137,38 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
      * @param which
      */
     public void handleLongClick(final int which) {
+
         final long orderNum = chosenOrder.getOrderNum();
         final OrderQuery query = mOrderDao.queryBuilder().where(OrderQueryDao.Properties.OrderNum.eq(orderNum)).unique();
         switch (which) {
             case 0:
                 query.setToTop(!query.getToTop());
                 mOrderDao.insertOrReplace(query);
-                sendBroadCastToRefresh();
+                mActivity = (MainActivity) mContext;
+                mActivity.notifyObservers();
                 break;
             case 1:
                 mOrderDao.delete(query);
-                sendBroadCastToRefresh();
+                mActivity = (MainActivity) mContext;
+                mActivity.notifyObservers();
                 break;
             case 2:
-                Dialog dialog = DialogUtils.createInputDialog(mActivity, "输入备注", R.layout.dialog_input_remark, query.getRemark(), new AlertDialogListener() {
+                Dialog dialog = DialogUtils.createInputDialog(mContext, "输入备注", R.layout.dialog_input_remark, query.getRemark(), new AlertDialogListener() {
                     @Override
                     public void OnPositive(String text) {
                         chosenOrder.setRemark(text);
                         mOrderDao.insertOrReplace(query);
-                        sendBroadCastToRefresh();
                     }
                 });
                 dialog.show();
                 break;
             case 3:
-                StringUtils.toCopy(String.valueOf(orderNum), mActivity);
+                StringUtils.toCopy(String.valueOf(orderNum), mContext);
                 DialogUtils.ShowToast("复制成功");
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * 注册广播接收器
-     */
-    public void receiveRefreshBroadcast() {
-        broadcastManager = LocalBroadcastManager.getInstance(mActivity);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(StringUtils.refreshAction);
-        MyLocalBroadCastReceiver mRerfreshReceiver = new MyLocalBroadCastReceiver();
-        broadcastManager.registerReceiver(mRerfreshReceiver, intentFilter);
-    }
-
-    /****
-     * 通知其他Fragment界面刷新列表
-     */
-    private void sendBroadCastToRefresh() {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(mActivity);
-        Intent intent = new Intent(StringUtils.refreshAction);
-        localBroadcastManager.sendBroadcast(intent);
     }
 
     @Override
@@ -226,4 +178,5 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

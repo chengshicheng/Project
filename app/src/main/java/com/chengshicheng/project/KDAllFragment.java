@@ -1,47 +1,59 @@
 package com.chengshicheng.project;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.chengshicheng.greendao.gen.OrderQueryDao;
+import com.chengshicheng.project.greendao.GreenDaoHelper;
 import com.chengshicheng.project.greendao.OrderQuery;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 快递鸟——全部Fragment界面
  * Created by chengshicheng on 2017/2/26.
  */
-public class KDFragment1 extends KDTabBaseFragment {
+public class KDAllFragment extends KDTabBaseFragment {
 
-
-    private KDRecyclerAdapter mAdapter;
+    private static KDRecyclerAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private static ArrayList<OrderQuery> mDatas = new ArrayList<OrderQuery>();
+    private View rootView;
 
-    public static KDFragment1 newInstance(Context context, Bundle bundle) {
-        KDFragment1 newFragment = new KDFragment1();
+    public static KDAllFragment newInstance(Context context, Bundle bundle) {
+        mContext = context;
+        KDAllFragment newFragment = new KDAllFragment();
         newFragment.setArguments(bundle);
         return newFragment;
     }
 
 
+    @Nullable
     @Override
-    protected View initView() {
-        View view = LayoutInflater.from(mActivity).inflate(R.layout.kd_fragment, null);
-        mAdapter = new KDRecyclerAdapter(mActivity, mDatas);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.lv_fragment1);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        if (null != rootView) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (null != parent) {
+                parent.removeView(rootView);
+            }
+        } else {
+            rootView = inflater.inflate(R.layout.kd_fragment, null);
+            initView(rootView);// 控件初始化
+        }
+        return rootView;
+    }
+
+    protected void initView(View rootView) {
+        mAdapter = new KDRecyclerAdapter(mContext, mDatas);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lv_fragment1);
         LinearLayoutManager layoutManager = new LinearLayoutManager(ProjectApp.getContext());
         mRecyclerView.addItemDecoration(new RecycleViewDivider(
                 ProjectApp.getContext(), LinearLayoutManager.HORIZONTAL, 3, getResources().getColor(R.color.listviewbg)));
@@ -50,7 +62,10 @@ public class KDFragment1 extends KDTabBaseFragment {
 
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnItemLongClickListener(this);
-        return view;
+
+        GreenDaoHelper.initDatabase();
+        mOrderDao = GreenDaoHelper.getDaoSession().getOrderQueryDao();
+        initData();
     }
 
     public void initData() {
@@ -65,10 +80,15 @@ public class KDFragment1 extends KDTabBaseFragment {
     }
 
 
-    @Override
     public void refreshRecyclerView() {
         initData();
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void update() {
+        if (mAdapter != null) {
+            refreshRecyclerView();
+        }
+    }
 }
