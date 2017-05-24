@@ -36,7 +36,6 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
 
 
     private int requestCode = 100;
-    private MainActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,16 +139,15 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
 
         final long orderNum = chosenOrder.getOrderNum();
         final OrderQuery query = mOrderDao.queryBuilder().where(OrderQueryDao.Properties.OrderNum.eq(orderNum)).unique();
+        final MainActivity mActivity = (MainActivity) mContext;
         switch (which) {
             case 0:
                 query.setToTop(!query.getToTop());
                 mOrderDao.insertOrReplace(query);
-                mActivity = (MainActivity) mContext;
                 mActivity.notifyObservers();
                 break;
             case 1:
                 mOrderDao.delete(query);
-                mActivity = (MainActivity) mContext;
                 mActivity.notifyObservers();
                 break;
             case 2:
@@ -158,7 +156,6 @@ public abstract class KDTabBaseFragment extends Fragment implements OnRecyclerVi
                     public void OnPositive(String text) {
                         chosenOrder.setRemark(text);
                         mOrderDao.insertOrReplace(query);
-                        mActivity = (MainActivity) mContext;
                         mActivity.notifyObservers();
                     }
                 });
