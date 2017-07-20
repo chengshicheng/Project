@@ -25,6 +25,8 @@ import com.chengshicheng.project.greendao.GreenDaoHelper;
 import com.chengshicheng.project.greendao.OrderQuery;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -220,9 +222,7 @@ public class TraceResultActivity extends BaseActivity implements SwipeRefreshLay
      * 通知主界面刷新列表
      */
     private void sendBroadCastToRefresh() {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        Intent intent = new Intent(StringUtils.refreshAction);
-        localBroadcastManager.sendBroadcast(intent);
+        EventBus.getDefault().post(new MessageEvent("REFRESH"));
     }
 
     private void showTraces(OrderTraceResponse response) {

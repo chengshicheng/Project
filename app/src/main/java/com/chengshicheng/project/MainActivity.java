@@ -20,8 +20,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +72,8 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         initViews();
         refreshTabLayout();
-        registerRefreshBroadcast();
+//        registerRefreshBroadcast();
+        EventBus.getDefault().register(this);
     }
 
 
@@ -249,27 +255,45 @@ public class MainActivity extends BaseActivity
     }
 
 
-    /**
-     * 接受到广播后，通知个界面刷新
-     */
-    private class MyLocalBroadCastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            LogUtils.PrintDebug("MyLocalBroadCastReceiver onReceive()");
-            if (StringUtils.refreshAction.equals(intent.getAction())) {
-                notifyObservers();
-            }
-        }
+//    /**
+//     * 接受到广播后，通知个界面刷新
+//     */
+//    private class MyLocalBroadCastReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            LogUtils.PrintDebug("MyLocalBroadCastReceiver onReceive()");
+//            if (StringUtils.refreshAction.equals(intent.getAction())) {
+//                notifyObservers();
+//            }
+//        }
+//    }
+
+//    /**
+//     * 注册广播接收器
+//     */
+//    public void registerRefreshBroadcast() {
+//        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(StringUtils.refreshAction);
+//        MyLocalBroadCastReceiver mRerfreshReceiver = new MyLocalBroadCastReceiver();
+//        broadcastManager.registerReceiver(mRerfreshReceiver, intentFilter);
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //取消事件注册
+        EventBus.getDefault().unregister(this);
+
+
     }
 
-    /**
-     * 注册广播接收器
-     */
-    public void registerRefreshBroadcast() {
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(StringUtils.refreshAction);
-        MyLocalBroadCastReceiver mRerfreshReceiver = new MyLocalBroadCastReceiver();
-        broadcastManager.registerReceiver(mRerfreshReceiver, intentFilter);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onShowMessageEvent(MessageEvent messageEvent) {
+        if (messageEvent.getMessage().equals("REFRESH")) {
+            notifyObservers();
+            LogUtils.PrintDebug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>notifyObservers");
+
+        }
     }
 }
