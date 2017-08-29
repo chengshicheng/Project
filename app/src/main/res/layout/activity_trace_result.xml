@@ -89,8 +89,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:paddingBottom="3dp"
-                        android:paddingTop="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="10dp"
                         android:text="快递公司："
                         android:textAppearance="?android:attr/textAppearanceSearchResultTitle"
                         android:textIsSelectable="true" />
@@ -110,8 +110,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="3dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="3dp"
                         android:textColor="@color/blackText"
                         android:textSize="16sp" />
                 </LinearLayout>

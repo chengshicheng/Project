@@ -167,6 +167,7 @@ public class TraceResultActivity extends BaseActivity implements SwipeRefreshLay
         save.setState(response.getState());
         if (null != oldOrder) {
             save.setRemark(oldOrder.getRemark());
+            save.setToTop(oldOrder.getToTop());
             if (!TextUtils.isEmpty(save.getRemark())) {
                 tvRemark.setText("备注：" + save.getRemark());
                 tvRemark.setVisibility(View.VISIBLE);
